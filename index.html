@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phoenix Lowe - Service Designer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --warm-black: #1a1a1a;
+            --warm-white: #fafaf8;
+            --terracotta: #d47366;
+            --sage: #8b9d83;
+            --clay: #b8967d;
+            --soft-gray: #e8e6e3;
+            --text-primary: #2a2a2a;
+            --text-secondary: #666666;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--warm-white);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(250, 250, 248, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--terracotta);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 5% 4rem;
+            background: linear-gradient(135deg, rgba(139, 157, 131, 0.05), rgba(212, 115, 102, 0.05));
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .hero-label {
+            display: inline-block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--terracotta);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .credentials {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .credential-badge {
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            color: var(--text-primary);
+        }
+
+        .credential-badge.pride {
+            background: linear-gradient(90deg, 
+                rgba(228, 3, 3, 0.12) 0%, 
+                rgba(255, 140, 0, 0.12) 16.66%, 
+                rgba(255, 237, 0, 0.12) 33.33%, 
+                rgba(0, 128, 38, 0.12) 50%, 
+                rgba(36, 64, 142, 0.12) 66.66%, 
+                rgba(115, 41, 130, 0.12) 83.33%
+            );
+            color: #5a4a6b;
+            border: 1px solid rgba(115, 41, 130, 0.2);
+            box-shadow: 0 2px 10px rgba(115, 41, 130, 0.1);
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: var(--terracotta);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: 2px solid var(--terracotta);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--terracotta);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            border: 2px solid var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-primary);
+            color: white;
+        }
+
+        /* Currently Section */
+        .currently-section {
+            padding: 4rem 5%;
+            background: var(--warm-black);
+            color: var(--warm-white);
+        }
+
+        .currently-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--clay);
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .currently-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .currently-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .currently-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .currently-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--soft-gray);
+        }
+
+        .currently-text strong {
+            color: white;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Bridge Section */
+        .bridge-section {
+            padding: 6rem 5%;
+            background: var(--warm-white);
+        }
+
+        .bridge-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .bridge-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .bridge-card {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .bridge-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .bridge-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: var(--terracotta);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .bridge-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .bridge-card p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        /* Featured Work Section */
+        .work-section {
+            padding: 6rem 5%;
+            background: var(--soft-gray);
+        }
+
+        .work-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .work-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .work-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .work-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, var(--sage), var(--clay));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .work-tag {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .work-content {
+            padding: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .work-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .work-description {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .work-meta {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-tag {
+            font-size: 0.8rem;
+            padding: 0.35rem 0.75rem;
+            background: var(--soft-gray);
+            border-radius: 4px;
+            color: var(--text-primary);
+        }
+
+        .placeholder-card {
+            border: 2px dashed var(--soft-gray);
+            background: rgba(232, 230, 227, 0.3);
+            cursor: default;
+        }
+
+        .placeholder-card:hover {
+            transform: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .placeholder-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            opacity: 0.6;
+        }
+
+        /* Clinical Work Section */
+        .clinical-section {
+            padding: 6rem 5%;
+            background: white;
+        }
+
+        .clinical-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .clinical-intro {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 5%;
+            background: var(--warm-black);
+            color: var(--warm-white);
+        }
+
+        .cta-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .cta-container h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .cta-container p {
+            font-size: 1.2rem;
+            color: var(--soft-gray);
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary-light {
+            padding: 1rem 2rem;
+            background: white;
+            color: var(--warm-black);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s;
+            border: 2px solid white;
+        }
+
+        .btn-primary-light:hover {
+            background: transparent;
+            color: white;
+        }
+
+        .btn-secondary-light {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            border: 2px solid white;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary-light:hover {
+            background: white;
+            color: var(--warm-black);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--warm-black);
+            color: var(--warm-white);
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--warm-white);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--terracotta);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                min-height: 80vh;
+                padding: 6rem 5% 4rem;
+            }
+
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bridge-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .currently-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .credentials {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .credential-badge {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hero-cta,
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-primary,
+            .btn-secondary,
+            .btn-primary-light,
+            .btn-secondary-light {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="new-homepage.html" class="logo">Phoenix Lowe</a>
+        <ul class="nav-links">
+            <li><a href="new-homepage.html">Work</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-label">Service Designer • Licensed Social Worker</span>
+            <h1 class="hero-title">Service Designer with a Clinical Background</h1>
+            <p class="hero-subtitle">
+                I design systems for the people who've been left out of them. With 4+ years as a Licensed Social Worker 
+                and mental health therapist, I bring trauma-informed care and community accountability to service design.
+            </p>
+            <div class="credentials">
+                <span class="credential-badge lsw">LSW • Licensed Social Worker</span>
+                <span class="credential-badge mps">MPS • User Experience Design</span>
+                <span class="credential-badge pride">2025 PRIDE Hall of Fame Inductee</span>
+            </div>
+            <div class="hero-cta">
+                <a href="#contact" class="btn-primary">Let's Talk About Your Project</a>
+                <a href="about.html" class="btn-secondary">My Story</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Currently Section -->
+    <section class="currently-section">
+        <div class="currently-container">
+            <div class="section-label">Currently</div>
+            <div class="currently-grid">
+                <div class="currently-item">
+                    <div class="currently-icon">🎓</div>
+                    <div class="currently-text">
+                        <strong>Finishing MPS in User Experience Design</strong>
+                        Columbus College of Art & Design, 2025
+                    </div>
+                </div>
+                <div class="currently-item">
+                    <div class="currently-icon">🏆</div>
+                    <div class="currently-text">
+                        <strong>2025 PRIDE Hall of Fame Inductee</strong>
+                        Chillicothe & Ross County Public Library
+                    </div>
+                </div>
+                <div class="currently-item">
+                    <div class="currently-icon">🏳️‍⚧️</div>
+                    <div class="currently-text">
+                        <strong>Co-Facilitating Trans*formers</strong>
+                        Community leadership since 2016
+                    </div>
+                </div>
+                <div class="currently-item">
+                    <div class="currently-icon">💼</div>
+                    <div class="currently-text">
+                        <strong>Seeking Service Design Roles</strong>
+                        Healthcare, civic tech, social services, community wellbeing
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bridge Story Section -->
+    <section class="bridge-section">
+        <div class="bridge-container">
+            <div class="section-header">
+                <h2>From the Frontlines to Service Design</h2>
+                <p>My path wasn't traditional, but it gave me something most designers don't have: 
+                   deep understanding of how systems impact real lives.</p>
+            </div>
+            <div class="bridge-cards">
+                <div class="bridge-card">
+                    <div class="bridge-number">01</div>
+                    <h3>The Frontlines</h3>
+                    <p>
+                        4+ years as a Licensed Social Worker and mental health therapist, working with families 
+                        in crisis, youth in juvenile justice, and communities navigating broken systems. I saw 
+                        how services failed people—not because of their motivation, but because of how systems 
+                        were designed.
+                    </p>
+                </div>
+                <div class="bridge-card">
+                    <div class="bridge-number">02</div>
+                    <h3>The Shift</h3>
+                    <p>
+                        I realized the barriers I was seeing—the gaps, the moments people gave up—weren't just 
+                        policy problems. They were design problems. The families I worked with deserved services 
+                        that actually met their needs. So I decided to learn how to redesign them.
+                    </p>
+                </div>
+                <div class="bridge-card">
+                    <div class="bridge-number">03</div>
+                    <h3>The Work</h3>
+                    <p>
+                        Now I combine clinical expertise with service design thinking. I bring trauma-informed 
+                        care, systems thinking, and community accountability to every project. I design for equity, 
+                        dignity, and the people who've been left behind.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Work Section -->
+    <section class="work-section">
+        <div class="work-container">
+            <div class="section-header">
+                <h2>Featured Work</h2>
+                <p>Service design projects and case studies</p>
+            </div>
+            <div class="work-grid">
+                <!-- F.I.R.E. Framework -->
+                <a href="fire-framework.html" class="work-card">
+                    <div class="work-image" style="background: linear-gradient(135deg, #d47366, #b8967d);">
+                        <span style="color: white;">🔥</span>
+                        <span class="work-tag" style="color: #d47366;">Capstone Project</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">F.I.R.E. Framework</h3>
+                        <p class="work-description">
+                            A trauma-informed service design system supporting queer and trans individuals experiencing 
+                            burnout through creative, restorative practices. Reframes rest as resistance.
+                        </p>
+                        <div class="work-meta">
+                            <span class="meta-tag">Service Design</span>
+                            <span class="meta-tag">Trauma-Informed</span>
+                            <span class="meta-tag">Community Wellbeing</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Grocery Delivery Service -->
+                <a href="#" class="work-card">
+                    <div class="work-image" style="background: linear-gradient(135deg, #8b9d83, #b8967d);">
+                        <span style="color: white;">🛒</span>
+                        <span class="work-tag" style="color: #8b9d83;">Group Project</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">Midwest Grocery Delivery Redesign</h3>
+                        <p class="work-description">
+                            Redesigned checkout experience for regional grocery delivery service, improving accessibility 
+                            and reducing friction for users with limited digital literacy. Team of 3 designers.
+                        </p>
+                        <div class="work-meta">
+                            <span class="meta-tag">Service Design</span>
+                            <span class="meta-tag">UX Research</span>
+                            <span class="meta-tag">Accessibility</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Placeholder Card -->
+                <div class="work-card placeholder-card">
+                    <div class="work-image" style="background: rgba(232, 230, 227, 0.5);">
+                        <span style="color: #999; font-size: 3rem;">✨</span>
+                    </div>
+                    <div class="work-content placeholder-content">
+                        <h3 class="work-title" style="color: #999;">More Projects Coming Soon</h3>
+                        <p class="work-description">
+                            Additional case studies and work samples currently in development.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clinical Work as Design Section -->
+    <section class="clinical-section">
+        <div class="clinical-container">
+            <div class="section-header">
+                <h2>Clinical Work as Service Design</h2>
+                <p>Before I called it "service design," I was already doing the work</p>
+            </div>
+            <p class="clinical-intro">
+                My clinical experience wasn't separate from design—it was systems-level design work in healthcare and 
+                social services. I mapped service delivery pain points, co-designed interventions with stakeholders, 
+                and redesigned systems to better serve vulnerable populations. Here's what that looked like:
+            </p>
+            <div class="work-grid">
+                <!-- IHBT Combined Card -->
+                <div class="work-card">
+                    <div class="work-image" style="background: linear-gradient(135deg, #8b9d83, #d47366);">
+                        <span style="color: white;">🏥</span>
+                        <span class="work-tag" style="color: #8b9d83;">Clinical Practice</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">Intensive Home-Based Treatment Services</h3>
+                        <p class="work-description">
+                            <strong>MST, I-FAST, and IHBT (2022-2024):</strong> Led evidence-based interventions for 
+                            youth in juvenile justice and families in crisis. Conducted cross-sector research with courts, 
+                            schools, and social services to map barriers and co-design interventions that improved outcomes 
+                            within policy constraints.
+                        </p>
+                        <div class="work-meta">
+                            <span class="meta-tag">Systems Thinking</span>
+                            <span class="meta-tag">Stakeholder Collaboration</span>
+                            <span class="meta-tag">Service Delivery</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trans*formers -->
+                <div class="work-card">
+                    <div class="work-image" style="background: linear-gradient(135deg, #b8967d, #d47366);">
+                        <span style="color: white;">🏳️‍⚧️</span>
+                        <span class="work-tag" style="color: #b8967d;">Community Organizing</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">Chillicothe Trans*formers</h3>
+                        <p class="work-description">
+                            <strong>Co-Founder & Co-Facilitator (2016-Present):</strong> Built and sustained community 
+                            infrastructure for trans and gender-expansive people in rural Appalachian Ohio. Designed 
+                            programming, facilitated support groups, and created systems for mutual aid and advocacy 
+                            in a resource-scarce context.
+                        </p>
+                        <div class="work-meta">
+                            <span class="meta-tag">Community Design</span>
+                            <span class="meta-tag">Facilitation</span>
+                            <span class="meta-tag">Grassroots Organizing</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LGBTQIA+ Therapy -->
+                <div class="work-card">
+                    <div class="work-image" style="background: linear-gradient(135deg, #d47366, #8b9d83);">
+                        <span style="color: white;">💚</span>
+                        <span class="work-tag" style="color: #d47366;">Clinical Practice</span>
+                    </div>
+                    <div class="work-content">
+                        <h3 class="work-title">LGBTQIA+ Affirming Therapy</h3>
+                        <p class="work-description">
+                            <strong>Licensed Therapist (2020-2021):</strong> Provided trauma-informed, affirming therapy 
+                            to LGBTQIA+ clients, transracial adoptees, and individuals navigating religious trauma. 
+                            Collaborated with multidisciplinary providers to design holistic care that addressed systemic 
+                            barriers affecting mental health outcomes.
+                        </p>
+                        <div class="work-meta">
+                            <span class="meta-tag">Trauma-Informed Care</span>
+                            <span class="meta-tag">Cross-Sector Work</span>
+                            <span class="meta-tag">Mental Health</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-container">
+            <h2>Let's Design Something That Matters</h2>
+            <p>
+                I'm looking for service design opportunities where I can bring my clinical background to bear on 
+                problems that impact real lives—healthcare, social services, civic tech, community wellbeing, 
+                and systems that serve marginalized populations.
+            </p>
+            <div class="cta-buttons">
+                <a href="mailto:niklowe20@gmail.com" class="btn-primary-light">Get in Touch</a>
+                <a href="about.html" class="btn-secondary-light">Learn More About Me</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <ul class="footer-links">
+            <li><a href="https://linkedin.com/in/yourprofile">LinkedIn</a></li>
+            <li><a href="mailto:niklowe20@gmail.com">Email</a></li>
+            <li><a href="#">Resume</a></li>
+        </ul>
+        <p style="opacity: 0.7; font-size: 0.9rem;">© 2025 Phoenix Lowe. Designed with intention.</p>
+    </footer>
+</body>
+</html>
