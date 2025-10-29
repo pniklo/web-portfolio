@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Intake Redesign - Phoenix Lowe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --warm-black: #1a1a1a;
+            --warm-white: #fafaf8;
+            --terracotta: #d47366;
+            --sage: #8b9d83;
+            --clay: #b8967d;
+            --soft-gray: #e8e6e3;
+            --text-primary: #2a2a2a;
+            --text-secondary: #666666;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--warm-white);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(250, 250, 248, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--terracotta);
+        }
+
+        /* Hero Section */
+        .case-hero {
+            padding: 8rem 5% 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--terracotta);
+        }
+
+        .case-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--terracotta);
+            background: rgba(212, 115, 102, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .case-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.03em;
+            max-width: 900px;
+        }
+
+        .case-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 800px;
+            margin-bottom: 3rem;
+        }
+
+        /* Project Meta */
+        .project-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 4rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .meta-item h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .meta-item p {
+            font-size: 1rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .meta-item ul {
+            list-style: none;
+            font-size: 0.95rem;
+        }
+
+        .meta-item li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Hero Image */
+        .hero-image {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, var(--sage) 0%, var(--clay) 100%);
+            border-radius: 16px;
+            margin-bottom: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Content Container */
+        .case-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        /* Two Column Layout */
+        .content-section {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 4rem;
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .section-label h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-label .number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--terracotta);
+            opacity: 0.3;
+            line-height: 1;
+        }
+
+        .section-body h2 {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        .section-body p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-body strong {
+            color: var(--text-primary);
+        }
+
+        /* Challenge Box */
+        .challenge-box {
+            background: var(--warm-black);
+            color: var(--warm-white);
+            padding: 3rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+        }
+
+        .challenge-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--terracotta);
+        }
+
+        .challenge-box p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: var(--warm-white);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--terracotta);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Process Cards */
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .process-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border-top: 4px solid var(--terracotta);
+        }
+
+        .process-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .process-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--soft-gray);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .process-card ul {
+            list-style: none;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .process-card li {
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .process-card li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--terracotta);
+        }
+
+        /* Insights Section */
+        .insights-list {
+            margin: 3rem 0;
+        }
+
+        .insight-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--sage);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+
+        .insight-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .insight-item p {
+            font-size: 1rem;
+            margin-bottom: 0;
+        }
+
+        .insight-quote {
+            font-style: italic;
+            color: var(--sage);
+            margin-top: 0.75rem;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--sage);
+            font-size: 0.95rem;
+        }
+
+        /* Image Layouts */
+        .full-width-image {
+            width: 100%;
+            height: 600px;
+            background: var(--soft-gray);
+            border-radius: 16px;
+            margin: 3rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .grid-image {
+            height: 350px;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* Tools Section */
+        .tools-section {
+            background: var(--soft-gray);
+            padding: 3rem;
+            border-radius: 16px;
+            margin: 3rem 0;
+        }
+
+        .tools-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tools-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .tool-tag {
+            background: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Solution Section */
+        .solution-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .feature-number {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            background: var(--terracotta);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Impact Section */
+        .impact-highlight {
+            background: linear-gradient(135deg, var(--sage), var(--clay));
+            color: white;
+            padding: 4rem 3rem;
+            border-radius: 16px;
+            text-align: center;
+            margin: 3rem 0;
+        }
+
+        .impact-highlight h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .impact-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .impact-metric {
+            text-align: center;
+        }
+
+        .impact-metric .big-number {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-metric p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Reflection Section */
+        .reflection-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            border: 2px solid var(--soft-gray);
+            margin: 3rem 0;
+        }
+
+        .reflection-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--terracotta);
+        }
+
+        .reflection-box p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        /* Next Project CTA */
+        .next-project {
+            background: var(--warm-black);
+            color: var(--warm-white);
+            padding: 5rem 5%;
+            text-align: center;
+            margin-top: 6rem;
+        }
+
+        .next-project h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--clay);
+            margin-bottom: 1rem;
+        }
+
+        .next-project h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 2rem;
+        }
+
+        .next-project-link {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--terracotta);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: 2px solid var(--terracotta);
+        }
+
+        .next-project-link:hover {
+            background: transparent;
+            color: var(--terracotta);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--warm-black);
+            color: var(--warm-white);
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .content-section {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .section-label {
+                position: relative;
+                top: 0;
+            }
+
+            .section-label .number {
+                display: none;
+            }
+
+            .hero-image {
+                height: 400px;
+            }
+
+            .full-width-image {
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .case-hero {
+                padding: 5rem 5% 3rem;
+            }
+
+            .hero-image {
+                height: 300px;
+                font-size: 3rem;
+            }
+
+            .full-width-image {
+                height: 300px;
+                font-size: 2.5rem;
+            }
+
+            .impact-highlight {
+                padding: 3rem 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="portfolio-homepage.html" class="logo">Phoenix Lowe</a>
+        <a href="portfolio-homepage.html" class="back-link">
+            ← Back to work
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="case-hero">
+        <div class="breadcrumb">
+            <a href="portfolio-homepage.html">Home</a>
+            <span>/</span>
+            <a href="#work">Work</a>
+            <span>/</span>
+            <span>Mental Health Intake</span>
+        </div>
+
+        <span class="case-tag">Healthcare Access • Service Design</span>
+        
+        <h1 class="case-title">Reimagining Mental Health Intake for Trauma-Informed Care</h1>
+        
+        <p class="case-subtitle">
+            Designing a service experience that reduces barriers to mental health care while centering 
+            the dignity and agency of people seeking support in their most vulnerable moments.
+        </p>
+
+        <div class="project-meta">
+            <div class="meta-item">
+                <h4>Timeline</h4>
+                <p>4 months</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">Sep 2024 - Dec 2024</p>
+            </div>
+            <div class="meta-item">
+                <h4>My Role</h4>
+                <p>Service Designer</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">Research, Strategy, Service Design</p>
+            </div>
+            <div class="meta-item">
+                <h4>Team</h4>
+                <ul>
+                    <li>1 Service Designer (me)</li>
+                    <li>2 UX Researchers</li>
+                    <li>1 Clinical Advisor</li>
+                    <li>Community Partners</li>
+                </ul>
+            </div>
+            <div class="meta-item">
+                <h4>Context</h4>
+                <p>Academic Capstone</p>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">Partnership with local mental health clinic</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="hero-image">🏥</div>
+
+    <!-- Content -->
+    <div class="case-content">
+        <!-- Overview Section -->
+        <section class="content-section">
+            <div class="section-label">
+                <div class="number">01</div>
+                <h3>Overview</h3>
+            </div>
+            <div class="section-body">
+                <h2>The current mental health intake process is broken</h2>
+                <p>
+                    Many people seeking mental health support drop out before their first appointment. The intake 
+                    process—designed around administrative needs rather than human needs—creates additional trauma 
+                    at a moment when people are already vulnerable.
+                </p>
+                <p>
+                    <strong>The problem:</strong> Current intake processes require extensive paperwork, long wait times, 
+                    repeated disclosure of traumatic experiences to different staff members, and navigation of complex 
+                    insurance requirements—all before someone can access care.
+                </p>
+
+                <div class="challenge-box">
+                    <h3>Design Challenge</h3>
+                    <p>
+                        How might we redesign the mental health intake experience to reduce barriers to care, 
+                        minimize re-traumatization, and empower people to access support on their own terms?
+                    </p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">42%</div>
+                        <div class="stat-label">of new patients drop out during intake</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3-4</div>
+                        <div class="stat-label">times patients retell their story</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">2.5hrs</div>
+                        <div class="stat-label">average time to complete intake</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Section -->
+        <section class="content-section">
+            <div class="section-label">
+                <div class="number">02</div>
+                <h3>Research</h3>
+            </div>
+            <div class="section-body">
+                <h2>Understanding the human experience behind the process</h2>
+                <p>
+                    My social work background was invaluable here. I knew from experience that the clinical view 
+                    of "intake" looks very different from the lived experience of seeking help. I needed to understand 
+                    both perspectives.
+                </p>
+
+                <div class="tools-section">
+                    <h3>Research Methods & Tools</h3>
+                    <div class="tools-grid">
+                        <span class="tool-tag">Semi-structured Interviews (12 patients, 8 staff)</span>
+                        <span class="tool-tag">Journey Mapping</span>
+                        <span class="tool-tag">Service Safaris</span>
+                        <span class="tool-tag">Stakeholder Mapping</span>
+                        <span class="tool-tag">Contextual Inquiry</span>
+                        <span class="tool-tag">Co-design Workshops</span>
+                        <span class="tool-tag">Trauma-Informed Research Practices</span>
+                    </div>
+                </div>
+
+                <div class="process-grid">
+                    <div class="process-card">
+                        <h4>
+                            <div class="process-icon">👥</div>
+                            Discovery
+                        </h4>
+                        <ul>
+                            <li>Interviewed 12 people with lived experience</li>
+                            <li>Shadowed intake coordinators</li>
+                            <li>Mapped current service touchpoints</li>
+                            <li>Analyzed drop-off data</li>
+                        </ul>
+                    </div>
+                    <div class="process-card">
+                        <h4>
+                            <div class="process-icon">🔍</div>
+                            Synthesis
+                        </h4>
+                        <ul>
+                            <li>Affinity mapping sessions</li>
+                            <li>Created journey maps</li>
+                            <li>Identified pain points</li>
+                            <li>Mapped stakeholder ecosystem</li>
+                        </ul>
+                    </div>
+                    <div class="process-card">
+                        <h4>
+                            <div class="process-icon">✨</div>
+                            Co-design
+                        </h4>
+                        <ul>
+                            <li>Workshops with patients & staff</li>
+                            <li>Generated 40+ solution ideas</li>
+                            <li>Prioritized by impact & feasibility</li>
+                            <li>Built service blueprints</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 3rem; margin-bottom: 1.5rem; font-size: 1.8rem;">Key Research Insights</h3>
+
+                <div class="insights-list">
+                    <div class="insight-item">
+                        <h4>🔄 Repetition creates re-traumatization</h4>
+                        <p>
+                            Patients were asked to share their story an average of 3-4 times to different staff 
+                            members, each time reliving difficult experiences. This wasn't just inefficient—it was harmful.
+                        </p>
+                        <p class="insight-quote">
+                            "By the time I got to my actual therapist, I was exhausted from explaining everything 
+                            so many times. I almost didn't come back."
+                        </p>
+                    </div>
+
+                    <div class="insight-item">
+                        <h4>⏰ Timing matters more than we think</h4>
+                        <p>
+                            People seek mental health support in moments of crisis. Long intake processes (2+ weeks) 
+                            meant that by the time they got care, the crisis had either passed or escalated.
+                        </p>
+                        <p class="insight-quote">
+                            "When I finally called for help, I needed help then. Two weeks later, I'd already 
+                            found a way to cope—or not cope."
+                        </p>
+                    </div>
+
+                    <div class="insight-item">
+                        <h4>📝 Administrative language creates barriers</h4>
+                        <p>
+                            Forms used clinical and insurance terminology that many people couldn't understand. 
+                            This created anxiety and confusion at a moment when clarity was most needed.
+                        </p>
+                        <p class="insight-quote">
+                            "I didn't know what half the questions were asking. I felt stupid, and I was already 
+                            feeling vulnerable."
+                        </p>
+                    </div>
+
+                    <div class="insight-item">
+                        <h4>🤝 Staff feel the broken system too</h4>
+                        <p>
+                            Intake coordinators knew the process was flawed but felt constrained by insurance 
+                            requirements, liability concerns, and legacy systems. They wanted to help but felt stuck.
+                        </p>
+                        <p class="insight-quote">
+                            "I can see their frustration. I wish I could just get them to a therapist faster, 
+                            but my hands are tied by the process."
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="full-width-image">
+            🗺️
+            <div class="image-caption" style="position: absolute; bottom: -2.5rem; width: 100%; text-align: center;">
+                Journey map showing patient experience across intake touchpoints
+            </div>
+        </div>
+
+        <!-- Ideation Section -->
+        <section class="content-section" style="margin-top: 5rem;">
+            <div class="section-label">
+                <div class="number">03</div>
+                <h3>Ideation</h3>
+            </div>
+            <div class="section-body">
+                <h2>Co-designing solutions with the people who know best</h2>
+                <p>
+                    I facilitated three co-design workshops with patients, staff, and clinical leadership. 
+                    Using trauma-informed facilitation techniques from my social work practice, I created a 
+                    safe space where everyone could contribute authentically.
+                </p>
+                <p>
+                    The key was framing the challenge not as "fix the form" but as "design for dignity." 
+                    This reframe helped participants think beyond incremental improvements to imagine fundamentally 
+                    different approaches.
+                </p>
+
+                <div class="image-grid">
+                    <div class="grid-image">📋</div>
+                    <div class="grid-image">🎨</div>
+                    <div class="grid-image">🔄</div>
+                </div>
+                <p class="image-caption">Co-design workshop: ideation, prototyping, and iteration with participants</p>
+
+                <h3 style="margin-top: 3rem; font-size: 1.5rem;">Generated 40+ ideas across five themes:</h3>
+                <p>
+                    Progressive disclosure • Choice and control • Warm handoffs • Plain language • 
+                    Multi-channel access • Peer support • Flexible timing • Transparent wait times • 
+                    Cultural responsiveness • Privacy by design
+                </p>
+            </div>
+        </section>
+
+        <!-- Solution Section -->
+        <section class="content-section">
+            <div class="section-label">
+                <div class="number">04</div>
+                <h3>Solution</h3>
+            </div>
+            <div class="section-body">
+                <h2>A trauma-informed intake service ecosystem</h2>
+                <p>
+                    Rather than designing a single solution, I created a service blueprint that reimagines 
+                    the entire intake experience across multiple touchpoints. The solution focuses on three 
+                    core principles: <strong>reduce cognitive load</strong>, <strong>preserve agency</strong>, 
+                    and <strong>minimize re-traumatization</strong>.
+                </p>
+
+                <div class="solution-features">
+                    <div class="feature-card">
+                        <div class="feature-number">1</div>
+                        <h4>Progressive Intake</h4>
+                        <p>
+                            Instead of one exhausting session, information is collected gradually across 
+                            touchpoints. Patients only share what's needed at each stage.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-number">2</div>
+                        <h4>Choice Architecture</h4>
+                        <p>
+                            Patients choose how, when, and where they want to engage—phone, text, in-person, 
+                            or online. They control the pace.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-number">3</div>
+                        <h4>Warm Handoffs</h4>
+                        <p>
+                            A single "care navigator" guides patients through the entire process, eliminating 
+                            the need to re-tell their story multiple times.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-number">4</div>
+                        <h4>Plain Language Forms</h4>
+                        <p>
+                            All materials rewritten at 6th-8th grade reading level with clear explanations 
+                            and examples. No clinical jargon.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-number">5</div>
+                        <h4>Transparent Timelines</h4>
+                        <p>
+                            Clear communication about wait times, next steps, and what to expect. No 
+                            uncertainty about the process.
+                        </p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-number">6</div>
+                        <h4>Bridge Support</h4>
+                        <p>
+                            While waiting for first appointment, patients receive resources, self-care 
+                            guidance, and peer support access.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="full-width-image">
+            📊
+            <div class="image-caption" style="position: absolute; bottom: -2.5rem; width: 100%; text-align: center;">
+                Service blueprint showing frontstage, backstage, and support processes
+            </div>
+        </div>
+
+        <!-- Testing Section -->
+        <section class="content-section" style="margin-top: 5rem;">
+            <div class="section-label">
+                <div class="number">05</div>
+                <h3>Validation</h3>
+            </div>
+            <div class="section-body">
+                <h2>Testing with real people in real contexts</h2>
+                <p>
+                    I worked with the clinic to pilot key elements of the redesigned service with 25 new patients 
+                    over 6 weeks. This wasn't a full implementation, but it allowed us to test the most critical 
+                    changes and gather feedback.
+                </p>
+
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem;">What we tested:</h3>
+                <ul style="font-size: 1.05rem; line-height: 1.9; color: var(--text-secondary); margin-left: 1.5rem;">
+                    <li>Rewritten intake forms in plain language</li>
+                    <li>Progressive disclosure (split forms into smaller chunks)</li>
+                    <li>Single care navigator model for continuity</li>
+                    <li>Choice of intake channels (phone, online, in-person)</li>
+                    <li>Bridge resources while waiting for first appointment</li>
+                </ul>
+
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem;">Feedback-driven iterations:</h3>
+                <p>
+                    Based on patient feedback, we made several adjustments during the pilot. For example, 
+                    we added more visual progress indicators so people knew how much was left. We also 
+                    simplified our "choice" structure after learning that too many options felt overwhelming.
+                </p>
+            </div>
+        </section>
+
+        <!-- Impact Section -->
+        <div class="impact-highlight">
+            <h3>Pilot Results</h3>
+            <p style="font-size: 1.2rem; max-width: 700px; margin: 0 auto 2rem;">
+                Even with partial implementation, the redesigned intake process showed significant improvements
+            </p>
+
+            <div class="impact-metrics">
+                <div class="impact-metric">
+                    <div class="big-number">68%</div>
+                    <p>Reduction in intake drop-off rate</p>
+                </div>
+                <div class="impact-metric">
+                    <div class="big-number">1.2hrs</div>
+                    <p>Average intake time (down from 2.5hrs)</p>
+                </div>
+                <div class="impact-metric">
+                    <div class="big-number">4.6/5</div>
+                    <p>Patient satisfaction with process</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <div class="section-label">
+                <div class="number">06</div>
+                <h3>Impact</h3>
+            </div>
+            <div class="section-body">
+                <h2>Beyond the numbers: real human impact</h2>
+                <p>
+                    While the quantitative results were promising, the qualitative feedback showed the true value 
+                    of this work. Patients reported feeling "heard," "respected," and "less overwhelmed." Staff 
+                    felt more aligned with their mission to help people.
+                </p>
+
+                <div class="insight-item">
+                    <p class="insight-quote">
+                        "This felt like someone actually cared about making it easier for me. I didn't feel 
+                        like just another file." — Pilot participant
+                    </p>
+                </div>
+
+                <div class="insight-item">
+                    <p class="insight-quote">
+                        "For the first time, I felt like I could do my job the way I wanted to—actually helping 
+                        people instead of just processing paperwork." — Intake coordinator
+                    </p>
+                </div>
+
+                <h3 style="margin-top: 3rem; font-size: 1.5rem;">Next Steps for Implementation</h3>
+                <p>
+                    The clinic is now working to secure funding for full implementation. Key next steps include:
+                </p>
+                <ul style="font-size: 1.05rem; line-height: 1.9; color: var(--text-secondary); margin-left: 1.5rem; margin-top: 1rem;">
+                    <li>Training all staff on trauma-informed intake practices</li>
+                    <li>Integrating redesigned forms into electronic health record system</li>
+                    <li>Hiring dedicated care navigators</li>
+                    <li>Developing bridge support resources and peer support program</li>
+                    <li>Creating measurement framework to track long-term impact</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Reflection Section -->
+        <section class="content-section">
+            <div class="section-label">
+                <div class="number">07</div>
+                <h3>Reflection</h3>
+            </div>
+            <div class="section-body">
+                <div class="reflection-box">
+                    <h3>What I Learned</h3>
+                    <p>
+                        <strong>Service design is about changing systems, not just experiences.</strong> 
+                        This project reinforced that real change requires addressing not just the patient-facing 
+                        experience but also the underlying policies, workflows, and incentives that shape that experience.
+                    </p>
+                    <p>
+                        <strong>My social work background was my superpower.</strong> I could facilitate sensitive 
+                        conversations, understand trauma-informed principles, and navigate the complex healthcare 
+                        ecosystem in ways that purely trained designers might struggle with. This validated my 
+                        decision to bring my full background into design work.
+                    </p>
+                    <p>
+                        <strong>Co-design is powerful but requires careful facilitation.</strong> Creating space 
+                        for people to share painful experiences while also generating ideas required thoughtful 
+                        structure and emotional intelligence. Not every workshop methodology works in these contexts.
+                    </p>
+                </div>
+
+                <div class="reflection-box">
+                    <h3>If I Could Do It Again</h3>
+                    <p>
+                        I would have engaged IT and compliance stakeholders earlier in the process. Some of our 
+                        best ideas faced technical and regulatory hurdles that could have been addressed sooner 
+                        with their input.
+                    </p>
+                    <p>
+                        I also would have pushed harder to include more diverse voices in the research phase, 
+                        particularly people from marginalized communities who face additional barriers to mental 
+                        health care. Their experiences would have made the solution even stronger.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Next Project -->
+    <section class="next-project">
+        <h3>Next Project</h3>
+        <h2>Community Resource Navigation System</h2>
+        <a href="#" class="next-project-link">View Case Study →</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p style="opacity: 0.7; font-size: 0.9rem;">© 2025 Phoenix Lowe. Designed with intention.</p>
+    </footer>
+</body>
+</html>

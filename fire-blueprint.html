@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F.I.R.E. Framework - Service Blueprint</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --warm-black: #1a1a1a;
+            --warm-white: #fafaf8;
+            --terracotta: #d47366;
+            --sage: #8b9d83;
+            --clay: #b8967d;
+            --soft-gray: #e8e6e3;
+            --text-primary: #2a2a2a;
+            --text-secondary: #666666;
+            --gold: #e8b563;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--warm-white);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 3rem;
+        }
+
+        .blueprint-container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .blueprint-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .blueprint-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .blueprint-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .blueprint-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .legend-box {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+        }
+
+        /* Circular Layout */
+        .blueprint-circular {
+            position: relative;
+            width: 100%;
+            height: 1200px;
+            margin: 4rem 0;
+        }
+
+        .center-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 280px;
+            background: linear-gradient(135deg, var(--terracotta), var(--clay));
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+        }
+
+        .core-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .core-title {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+        }
+
+        .core-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        /* Phase Sections - Circular arrangement */
+        .phase-section {
+            position: absolute;
+            width: 420px;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .phase-section.feel {
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top: 6px solid var(--terracotta);
+        }
+
+        .phase-section.inquire {
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+            border-top: 6px solid var(--clay);
+        }
+
+        .phase-section.respond {
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top: 6px solid var(--sage);
+        }
+
+        .phase-section.extend {
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+            border-top: 6px solid var(--gold);
+        }
+
+        .phase-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .phase-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: var(--terracotta);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-section.inquire .phase-number {
+            background: var(--clay);
+        }
+
+        .phase-section.respond .phase-number {
+            background: var(--sage);
+        }
+
+        .phase-section.extend .phase-number {
+            background: var(--gold);
+        }
+
+        .phase-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .phase-theme {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+        }
+
+        .layer {
+            margin-bottom: 1.25rem;
+        }
+
+        .layer-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .layer-content {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .layer-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .layer-content li {
+            padding-left: 1.25rem;
+            position: relative;
+            margin-bottom: 0.35rem;
+        }
+
+        .layer-content li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--terracotta);
+            font-weight: bold;
+        }
+
+        /* Connecting Lines */
+        .connection-line {
+            position: absolute;
+            background: var(--soft-gray);
+            z-index: 1;
+        }
+
+        .connection-arrow {
+            position: absolute;
+            font-size: 2rem;
+            color: var(--terracotta);
+            z-index: 2;
+        }
+
+        /* Cyclic arrows */
+        .cycle-path {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 500px;
+            border: 3px dashed var(--soft-gray);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .cycle-arrow {
+            position: absolute;
+            font-size: 2.5rem;
+            color: var(--terracotta);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .cycle-arrow.top {
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-90deg);
+        }
+
+        .cycle-arrow.right {
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .cycle-arrow.bottom {
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%) rotate(90deg);
+        }
+
+        .cycle-arrow.left {
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        /* Traditional Blueprint Section (for comparison) */
+        .traditional-blueprint {
+            margin-top: 6rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .blueprint-table {
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .blueprint-row {
+            display: grid;
+            grid-template-columns: 200px repeat(4, 1fr);
+            border-bottom: 1px solid var(--soft-gray);
+        }
+
+        .blueprint-row:last-child {
+            border-bottom: none;
+        }
+
+        .blueprint-cell {
+            padding: 1.5rem;
+            border-right: 1px solid var(--soft-gray);
+        }
+
+        .blueprint-cell:last-child {
+            border-right: none;
+        }
+
+        .row-label {
+            background: var(--soft-gray);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .row-header {
+            background: var(--warm-black);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .cell-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .cell-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cell-content li {
+            padding-left: 1rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .cell-content li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--terracotta);
+        }
+
+        .touchpoint-marker {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--terracotta);
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        /* Journey Map Style */
+        .journey-blueprint {
+            margin-top: 6rem;
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .journey-phases {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .journey-phase {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .journey-phase:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--terracotta);
+        }
+
+        .journey-phase-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .journey-phase-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .journey-layers {
+            display: grid;
+            grid-template-columns: 150px repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .journey-layer-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            padding: 1rem;
+            background: var(--soft-gray);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .journey-cell {
+            padding: 1rem;
+            background: var(--warm-white);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .emotional-journey {
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 2px solid var(--soft-gray);
+        }
+
+        .emotion-graph {
+            position: relative;
+            height: 200px;
+            background: var(--warm-white);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .emotion-line {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            right: 2rem;
+            height: 2px;
+            background: var(--soft-gray);
+        }
+
+        .emotion-point {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--terracotta);
+            border-radius: 50%;
+            bottom: 2rem;
+            transform: translateX(-50%);
+        }
+
+        /* Ecosystem Map Style */
+        .ecosystem-blueprint {
+            margin-top: 6rem;
+            position: relative;
+            height: 800px;
+        }
+
+        .ecosystem-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: var(--terracotta);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(212, 115, 102, 0.3);
+        }
+
+        .ecosystem-node {
+            position: absolute;
+            width: 140px;
+            padding: 1rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .node-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--terracotta);
+        }
+
+        .ecosystem-node:nth-child(2) { top: 10%; left: 20%; }
+        .ecosystem-node:nth-child(3) { top: 10%; right: 20%; }
+        .ecosystem-node:nth-child(4) { top: 35%; left: 5%; }
+        .ecosystem-node:nth-child(5) { top: 35%; right: 5%; }
+        .ecosystem-node:nth-child(6) { bottom: 20%; left: 15%; }
+        .ecosystem-node:nth-child(7) { bottom: 20%; right: 15%; }
+        .ecosystem-node:nth-child(8) { bottom: 5%; left: 50%; transform: translateX(-50%); }
+
+        .ecosystem-connector {
+            position: absolute;
+            width: 2px;
+            background: var(--soft-gray);
+            transform-origin: top;
+        }
+
+        /* Notes Section */
+        .notes-section {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: var(--soft-gray);
+            border-radius: 16px;
+        }
+
+        .notes-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--terracotta);
+        }
+
+        .notes-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 1400px) {
+            .blueprint-circular {
+                height: 1400px;
+            }
+
+            .phase-section {
+                width: 360px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                padding: 1.5rem;
+            }
+
+            .blueprint-circular {
+                display: none;
+            }
+
+            .blueprint-row {
+                grid-template-columns: 150px 1fr;
+            }
+
+            .journey-layers {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blueprint-container">
+        <!-- Header -->
+        <div class="blueprint-header">
+            <h1 class="blueprint-title">F.I.R.E. Framework Service Blueprint</h1>
+            <p class="blueprint-subtitle">A cyclical service design for post-burnout creative resistance</p>
+            
+            <div class="blueprint-legend">
+                <div class="legend-item">
+                    <div class="legend-box" style="background: var(--terracotta);"></div>
+                    <span>User Actions</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: var(--clay);"></div>
+                    <span>Frontstage (Visible)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: var(--sage);"></div>
+                    <span>Backstage (Invisible)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: var(--gold);"></div>
+                    <span>Support Processes</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Style 1: Circular/Organic Blueprint -->
+        <div class="section-title">Style 1: Circular Service Blueprint</div>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+            This format reflects the cyclical, non-linear nature of the F.I.R.E. Framework. Users can enter at any phase and move through the system at their own pace.
+        </p>
+
+        <div class="blueprint-circular">
+            <!-- Center Core -->
+            <div class="center-core">
+                <div class="core-icon">🔥</div>
+                <div class="core-title">F.I.R.E.</div>
+                <div class="core-subtitle">User-Directed<br>Non-Linear Journey</div>
+            </div>
+
+            <!-- Cycle Path -->
+            <div class="cycle-path">
+                <div class="cycle-arrow top">➜</div>
+                <div class="cycle-arrow right">➜</div>
+                <div class="cycle-arrow bottom">➜</div>
+                <div class="cycle-arrow left">➜</div>
+            </div>
+
+            <!-- FEEL Phase -->
+            <div class="phase-section feel">
+                <div class="phase-header">
+                    <div class="phase-number">F</div>
+                    <div class="phase-name">FEEL</div>
+                    <div class="phase-theme">Stillness • Acceptance</div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">User Actions</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Selects FEEL card from deck</li>
+                            <li>Engages with sensory prompt</li>
+                            <li>Completes body check-in</li>
+                            <li>Optional: Creates rest altar</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Frontstage (Visible)</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Card with soothing prompt</li>
+                            <li>Guidebook instructions</li>
+                            <li>Low-effort ritual suggestions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Backstage (Invisible)</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Trauma-informed prompt design</li>
+                            <li>No tracking or data collection</li>
+                            <li>User controls pacing entirely</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Support Processes</div>
+                    <div class="layer-content">
+                        Analog format ensures privacy; guidebook provides context without requiring facilitator
+                    </div>
+                </div>
+            </div>
+
+            <!-- INQUIRE Phase -->
+            <div class="phase-section inquire">
+                <div class="phase-header">
+                    <div class="phase-number">I</div>
+                    <div class="phase-name">INQUIRE</div>
+                    <div class="phase-theme">Reflection • Reorientation</div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">User Actions</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Draws INQUIRE card</li>
+                            <li>Journals or dialogues with peer</li>
+                            <li>Explores needs and losses</li>
+                            <li>Optional: Letter to future self</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Frontstage (Visible)</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Reflective prompts on cards</li>
+                            <li>Peer dialogue frameworks</li>
+                            <li>Ritual instructions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Backstage (Invisible)</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Questions designed for depth not speed</li>
+                            <li>Therapy-informed structure</li>
+                            <li>No external validation required</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Support Processes</div>
+                    <div class="layer-content">
+                        Can be done solo or with trusted person; no facilitator needed
+                    </div>
+                </div>
+            </div>
+
+            <!-- RESPOND Phase -->
+            <div class="phase-section respond">
+                <div class="phase-header">
+                    <div class="phase-number">R</div>
+                    <div class="phase-name">RESPOND</div>
+                    <div class="phase-theme">Creation • Expression</div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">User Actions</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Selects RESPOND card</li>
+                            <li>Chooses creative medium</li>
+                            <li>Creates artifact (zine, poetry, etc.)</li>
+                            <li>Works at own pace</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Frontstage (Visible)</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Creative challenges on cards</li>
+                            <li>Material suggestions</li>
+                            <li>Example artifacts in guidebook</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Backstage (Invisible)</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Low-stakes prompts (no "good art" pressure)</li>
+                            <li>Process over product emphasis</li>
+                            <li>No sharing requirement</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Support Processes</div>
+                    <div class="layer-content">
+                        Accessible materials; no special skills required; examples inspire without prescribing
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXTEND Phase -->
+            <div class="phase-section extend">
+                <div class="phase-header">
+                    <div class="phase-number">E</div>
+                    <div class="phase-name">EXTEND</div>
+                    <div class="phase-theme">Evolution • Impact</div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">User Actions</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Draws EXTEND card</li>
+                            <li>Decides: share, archive, or iterate</li>
+                            <li>Optional: Community exchange</li>
+                            <li>Reflects on experience</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Frontstage (Visible)</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>Sharing options on cards</li>
+                            <li>Archive ritual instructions</li>
+                            <li>Community connection ideas</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Backstage (Invisible)</div>
+                    <div class="layer-content">
+                        <ul>
+                            <li>User controls all visibility</li>
+                            <li>No metrics or tracking</li>
+                            <li>Emphasizes user autonomy</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="layer">
+                    <div class="layer-title">Support Processes</div>
+                    <div class="layer-content">
+                        Optional community networks; user decides if/how to connect; private by default
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Style 2: Traditional Swimlane Blueprint -->
+        <div class="traditional-blueprint">
+            <div class="section-title">Style 2: Traditional Swimlane Blueprint</div>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                A more conventional format showing one complete cycle through the framework. Each phase flows left to right.
+            </p>
+
+            <div class="blueprint-table">
+                <div class="blueprint-row row-header">
+                    <div class="blueprint-cell">Layer</div>
+                    <div class="blueprint-cell">FEEL</div>
+                    <div class="blueprint-cell">INQUIRE</div>
+                    <div class="blueprint-cell">RESPOND</div>
+                    <div class="blueprint-cell">EXTEND</div>
+                </div>
+
+                <div class="blueprint-row">
+                    <div class="blueprint-cell row-label">Physical Evidence</div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            <ul>
+                                <li>FEEL cards with sensory prompts</li>
+                                <li>Guidebook (stillness section)</li>
+                                <li>Optional: candle, texture item</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            <ul>
+                                <li>INQUIRE cards with reflection prompts</li>
+                                <li>Journal or paper</li>
+                                <li>Guidebook (inquiry section)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            <ul>
+                                <li>RESPOND cards with creative challenges</li>
+                                <li>Materials (paper, scissors, fabric, etc.)</li>
+                                <li>Example artifacts in guidebook</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            <ul>
+                                <li>EXTEND cards with sharing options</li>
+                                <li>Created artifact</li>
+                                <li>Archive box (optional)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blueprint-row">
+                    <div class="blueprint-cell row-label">User Actions</div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            <span class="touchpoint-marker"></span> Draws card<br>
+                            <span class="touchpoint-marker"></span> Reads prompt<br>
+                            <span class="touchpoint-marker"></span> Engages with sensory experience<br>
+                            <span class="touchpoint-marker"></span> Body check-in<br>
+                            <span class="touchpoint-marker"></span> Optional ritual
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            <span class="touchpoint-marker"></span> Draws card<br>
+                            <span class="touchpoint-marker"></span> Journals<br>
+                            <span class="touchpoint-marker"></span> Peer dialogue (optional)<br>
+                            <span class="touchpoint-marker"></span> Self-reflection<br>
+                            <span class="touchpoint-marker"></span> Letter writing (optional)
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            <span class="touchpoint-marker"></span> Draws card<br>
+                            <span class="touchpoint-marker"></span> Selects medium<br>
+                            <span class="touchpoint-marker"></span> Creates artifact<br>
+                            <span class="touchpoint-marker"></span> Works at own pace<br>
+                            <span class="touchpoint-marker"></span> Finishes creation
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            <span class="touchpoint-marker"></span> Draws card<br>
+                            <span class="touchpoint-marker"></span> Decides sharing approach<br>
+                            <span class="touchpoint-marker"></span> Archives or shares<br>
+                            <span class="touchpoint-marker"></span> Reflects on cycle<br>
+                            <span class="touchpoint-marker"></span> Re-enters or exits
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blueprint-row">
+                    <div class="blueprint-cell row-label">Frontstage<br>(Visible)</div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Minimalist card design<br>
+                            • Soothing color palette<br>
+                            • Clear, gentle language<br>
+                            • Ritual instructions<br>
+                            • Guidebook support
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Thoughtful prompts<br>
+                            • Peer dialogue frameworks<br>
+                            • Solo reflection guides<br>
+                            • Letter template<br>
+                            • Example reflections
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Creative challenges<br>
+                            • Material suggestions<br>
+                            • Process instructions<br>
+                            • Example artifacts<br>
+                            • Inspiration appendix
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Sharing options<br>
+                            • Archive ritual guide<br>
+                            • Community ideas<br>
+                            • Reflection prompts<br>
+                            • Next steps guidance
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blueprint-row">
+                    <div class="blueprint-cell row-label">Backstage<br>(Invisible)</div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Trauma-informed prompt design<br>
+                            • No data collection<br>
+                            • User-controlled pacing<br>
+                            • Accessibility considerations<br>
+                            • Safety-first design
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Therapy-informed questions<br>
+                            • Depth over speed<br>
+                            • No validation required<br>
+                            • Privacy by design<br>
+                            • Consent-centered
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Low-stakes framing<br>
+                            • Process over product<br>
+                            • No sharing pressure<br>
+                            • Accessible skill level<br>
+                            • Anti-perfectionism
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • User autonomy prioritized<br>
+                            • No metrics/tracking<br>
+                            • Private by default<br>
+                            • Optional community<br>
+                            • User controls visibility
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blueprint-row">
+                    <div class="blueprint-cell row-label">Support<br>Processes</div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Guidebook provides context<br>
+                            • No facilitator required<br>
+                            • Analog ensures privacy<br>
+                            • Can be done anywhere
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Solo or paired use<br>
+                            • No external tools<br>
+                            • Flexible timing<br>
+                            • Self-directed
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Basic materials accessible<br>
+                            • No special skills needed<br>
+                            • Examples inspire not prescribe<br>
+                            • Multiple options given
+                        </div>
+                    </div>
+                    <div class="blueprint-cell">
+                        <div class="cell-content">
+                            • Optional networks<br>
+                            • User decides connection<br>
+                            • No required follow-up<br>
+                            • Can re-enter cycle anytime
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Style 3: Journey Map Hybrid -->
+        <div class="journey-blueprint">
+            <div class="section-title">Style 3: Journey Map + Blueprint Hybrid</div>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                Combines user journey thinking with service blueprint layers, emphasizing emotional experience.
+            </p>
+
+            <div class="journey-phases">
+                <div class="journey-phase">
+                    <div class="journey-phase-name">FEEL</div>
+                    <div class="journey-phase-desc">Stillness</div>
+                </div>
+                <div class="journey-phase">
+                    <div class="journey-phase-name">INQUIRE</div>
+                    <div class="journey-phase-desc">Reflection</div>
+                </div>
+                <div class="journey-phase">
+                    <div class="journey-phase-name">RESPOND</div>
+                    <div class="journey-phase-desc">Creation</div>
+                </div>
+                <div class="journey-phase">
+                    <div class="journey-phase-name">EXTEND</div>
+                    <div class="journey-phase-desc">Evolution</div>
+                </div>
+            </div>
+
+            <div class="journey-layers">
+                <div class="journey-layer-label">Doing</div>
+                <div class="journey-cell">Sensory check-in, body awareness, rest ritual</div>
+                <div class="journey-cell">Journaling, dialogue, reflecting on needs/losses</div>
+                <div class="journey-cell">Creating artifact through chosen medium</div>
+                <div class="journey-cell">Deciding how creation lives on, reflecting</div>
+
+                <div class="journey-layer-label">Thinking</div>
+                <div class="journey-cell">"Is it okay to just rest? Am I giving up?"</div>
+                <div class="journey-cell">"What do I actually need? What have I lost?"</div>
+                <div class="journey-cell">"What wants to come out? How do I express this?"</div>
+                <div class="journey-cell">"Who might this help? Do I want to share it?"</div>
+
+                <div class="journey-layer-label">Feeling</div>
+                <div class="journey-cell">Relief mixed with guilt, physical exhaustion</div>
+                <div class="journey-cell">Grief, clarity, vulnerability, recognition</div>
+                <div class="journey-cell">Flow, focus, surprise, reconnection with self</div>
+                <div class="journey-cell">Pride, hopefulness, agency, possibility</div>
+
+                <div class="journey-layer-label">Touchpoints</div>
+                <div class="journey-cell">FEEL card, guidebook, sensory items, private space</div>
+                <div class="journey-cell">INQUIRE card, journal, trusted friend (optional)</div>
+                <div class="journey-cell">RESPOND card, materials, creative space, time</div>
+                <div class="journey-cell">EXTEND card, artifact, community (optional)</div>
+
+                <div class="journey-layer-label">Pain Points</div>
+                <div class="journey-cell">Guilt about not "doing more"; shame about rest</div>
+                <div class="journey-cell">Confronting losses; feeling overwhelmed by needs</div>
+                <div class="journey-cell">Fear of "not being good at art"; perfectionism</div>
+                <div class="journey-cell">Anxiety about visibility; fear of judgment</div>
+
+                <div class="journey-layer-label">Opportunities</div>
+                <div class="journey-cell">Reframe rest as valid; honor exhaustion without shame</div>
+                <div class="journey-cell">Name what's been buried; validate complexity</div>
+                <div class="journey-cell">Emphasize process not product; celebrate expression</div>
+                <div class="journey-cell">Affirm user autonomy; normalize private creation</div>
+            </div>
+
+            <div class="emotional-journey">
+                <h3 style="margin-bottom: 1rem; font-size: 1.3rem;">Emotional Arc</h3>
+                <div class="emotion-graph">
+                    <div class="emotion-line"></div>
+                    <div class="emotion-point" style="left: 10%; bottom: calc(2rem + 20px);"></div>
+                    <div class="emotion-point" style="left: 35%; bottom: calc(2rem + 40px);"></div>
+                    <div class="emotion-point" style="left: 60%; bottom: calc(2rem + 90px);"></div>
+                    <div class="emotion-point" style="left: 85%; bottom: calc(2rem + 110px);"></div>
+                    <div style="position: absolute; left: 10%; bottom: 0; font-size: 0.85rem; color: var(--text-secondary);">Exhausted</div>
+                    <div style="position: absolute; left: 35%; bottom: 0; font-size: 0.85rem; color: var(--text-secondary);">Reflective</div>
+                    <div style="position: absolute; left: 60%; bottom: 0; font-size: 0.85rem; color: var(--text-secondary);">Engaged</div>
+                    <div style="position: absolute; left: 85%; bottom: 0; font-size: 0.85rem; color: var(--text-secondary);">Hopeful</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Style 4: Ecosystem Map -->
+        <div class="section-title" style="margin-top: 6rem;">Style 4: Service Ecosystem Map</div>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 3rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Shows how F.I.R.E. connects to broader community systems and support structures.
+        </p>
+
+        <div class="ecosystem-blueprint">
+            <div class="ecosystem-center">F.I.R.E.<br>User</div>
+
+            <div class="ecosystem-node">
+                <div class="node-title">Card Deck</div>
+                Physical artifact with prompts for each phase
+            </div>
+
+            <div class="ecosystem-node">
+                <div class="node-title">Guidebook</div>
+                Context, rituals, examples, inspiration
+            </div>
+
+            <div class="ecosystem-node">
+                <div class="node-title">Trusted Peers</div>
+                Optional dialogue partners for inquiry phase
+            </div>
+
+            <div class="ecosystem-node">
+                <div class="node-title">Creative Materials</div>
+                Accessible supplies for response phase
+            </div>
+
+            <div class="ecosystem-node">
+                <div class="node-title">Private Space</div>
+                Physical or emotional sanctuary for work
+            </div>
+
+            <div class="ecosystem-node">
+                <div class="node-title">Community Networks</div>
+                Optional sharing spaces, zine swaps, etc.
+            </div>
+
+            <div class="ecosystem-node">
+                <div class="node-title">Mental Health Support</div>
+                Therapy, support groups (complementary)
+            </div>
+
+            <div class="ecosystem-node">
+                <div class="node-title">Activist Spaces</div>
+                Re-entry point when/if user chooses
+            </div>
+        </div>
+
+        <!-- Design Notes -->
+        <div class="notes-section">
+            <h3 class="notes-title">Design Notes: Finding Your Blueprint Style</h3>
+            <div class="notes-content">
+                <p style="margin-bottom: 1rem;">
+                    <strong>Why offer multiple formats?</strong> Different projects need different visualization strategies. 
+                    The F.I.R.E. Framework is cyclical and user-directed, which the circular blueprint captures beautifully. 
+                    But stakeholders used to traditional formats might need the swimlane version for clarity.
+                </p>
+                <p style="margin-bottom: 1rem;">
+                    <strong>When to use which:</strong>
+                </p>
+                <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+                    <li><strong>Circular/Organic:</strong> Best for non-linear services, cyclical experiences, or emphasizing user autonomy</li>
+                    <li><strong>Swimlane:</strong> Best for stakeholder presentations, linear processes, or showing clear touchpoints</li>
+                    <li><strong>Journey Hybrid:</strong> Best when emotional experience is central, or combining UX + service design</li>
+                    <li><strong>Ecosystem Map:</strong> Best for showing relationships between system components, not sequence</li>
+                </ul>
+                <p style="margin-bottom: 1rem;">
+                    <strong>Developing your style:</strong> Your "style" emerges from matching form to function. Ask: What's the 
+                    core nature of this service? Is it linear or cyclical? Is the emotional journey the story? Let that guide 
+                    your format choice.
+                </p>
+                <p>
+                    <strong>For portfolio:</strong> Including multiple blueprint styles in your portfolio shows range and strategic 
+                    thinking. It demonstrates you're not using templates—you're choosing the right tool for each job.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
