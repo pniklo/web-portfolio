@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplifying Substitutions - Phoenix Lowe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --warm-black: #1a1a1a;
+            --warm-white: #fafaf8;
+            --terracotta: #d47366;
+            --sage: #8b9d83;
+            --clay: #b8967d;
+            --soft-gray: #e8e6e3;
+            --text-primary: #2a2a2a;
+            --text-secondary: #666666;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--warm-white);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(250, 250, 248, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--terracotta);
+        }
+
+        /* Hero Section */
+        .case-study-hero {
+            padding: 8rem 5% 4rem;
+            background: linear-gradient(135deg, rgba(139, 157, 131, 0.08), rgba(184, 150, 125, 0.08));
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .breadcrumb {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--terracotta);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin-bottom: 3rem;
+        }
+
+        .project-tag {
+            display: inline-block;
+            background: var(--sage);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 500px;
+            background: var(--soft-gray);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-placeholder {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .image-dimensions {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-family: monospace;
+        }
+
+        /* Context Section */
+        .context-section {
+            padding: 6rem 5%;
+            background: white;
+        }
+
+        .context-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .context-intro {
+            max-width: 900px;
+            margin: 0 auto 4rem;
+        }
+
+        .context-intro p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .context-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .context-item h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--sage);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .context-item p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+        }
+
+        .context-item ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .context-item li {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-primary);
+            padding-left: 1.25rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .context-item li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--sage);
+            font-weight: bold;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--soft-gray), transparent);
+            margin: 4rem 0;
+        }
+
+        /* Standard Section */
+        .standard-section {
+            padding: 6rem 5%;
+            background: var(--warm-white);
+        }
+
+        .standard-section.alt {
+            background: var(--soft-gray);
+        }
+
+        .standard-section.dark {
+            background: var(--warm-black);
+            color: var(--warm-white);
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--terracotta);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .dark .section-label {
+            color: var(--clay);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .section-description {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            max-width: 900px;
+        }
+
+        .dark .section-description {
+            color: var(--soft-gray);
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .content-block h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .dark .content-block h3 {
+            color: white;
+        }
+
+        .content-block p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .dark .content-block p {
+            color: var(--soft-gray);
+        }
+
+        /* Findings Grid */
+        .findings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .finding-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .finding-number {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--sage);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .finding-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+            color: var(--text-primary);
+        }
+
+        .finding-card p {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        /* Image Container */
+        .image-container {
+            margin: 3rem 0;
+        }
+
+        .image-container.full-width {
+            margin: 3rem -5%;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            background: var(--soft-gray);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .image-caption {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin: 4rem 0;
+        }
+
+        .two-column.reverse {
+            direction: rtl;
+        }
+
+        .two-column.reverse > * {
+            direction: ltr;
+        }
+
+        /* Blueprint Callout */
+        .blueprint-callout {
+            background: linear-gradient(135deg, var(--sage), var(--clay));
+            padding: 4rem;
+            border-radius: 16px;
+            color: white;
+            margin: 4rem 0;
+            text-align: center;
+        }
+
+        .blueprint-callout h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .blueprint-callout p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            line-height: 1.7;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Reflection Section */
+        .reflection-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .reflection-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--terracotta);
+        }
+
+        .alt .reflection-box {
+            background: var(--warm-white);
+        }
+
+        .reflection-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--terracotta);
+        }
+
+        .reflection-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reflection-box li {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .reflection-box li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--terracotta);
+            font-weight: bold;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 5%;
+            background: var(--warm-black);
+            color: var(--warm-white);
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-container h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+        }
+
+        .cta-container p {
+            font-size: 1.2rem;
+            color: var(--soft-gray);
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: var(--terracotta);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: 2px solid var(--terracotta);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--terracotta);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 2px solid white;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--warm-black);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--warm-black);
+            color: var(--warm-white);
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .nav-links {
+                display: none;
+            }
+
+            .content-grid,
+            .two-column,
+            .reflection-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .findings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .two-column.reverse {
+                direction: ltr;
+            }
+
+            .image-container.full-width {
+                margin: 3rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html" class="logo">Phoenix Lowe</a>
+        <ul class="nav-links">
+            <li><a href="index.html">Work</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="case-study-hero">
+        <div class="hero-container">
+            <div class="breadcrumb">
+                <a href="index.html">← Back to Work</a>
+            </div>
+            <div class="hero-content">
+                <span class="project-tag">Service Design • Team Project</span>
+                <h1 class="hero-title">Simplifying Substitutions: Redesigning Grocery Delivery for Trust and Transparency</h1>
+                <p class="hero-subtitle">
+                    Transforming frustrating substitution experiences into moments of trust through improved 
+                    product tagging, clearer communication, and service design thinking.
+                </p>
+            </div>
+            <div class="hero-image">
+                <div class="image-placeholder">
+                    📱 Hero Image: Updated screen flow mockups
+                    <span class="image-dimensions">Recommended: 1400px × 500px</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Context Section -->
+    <section class="context-section">
+        <div class="context-container">
+            <div class="context-intro">
+                <p>
+                    This project focused on the <strong>service redesign</strong> of a regional grocery delivery 
+                    platform to address user pain points identified through interviews. As part of a three-person 
+                    design team, I helped lead the research and ideation workshops, analyzed research data, and 
+                    developed the flowcharts, wireframes, and low-fidelity prototypes.
+                </p>
+                <p>
+                    Our goal was to enhance the overall user experience and streamline backend processes related 
+                    to the selection of substitution and backup items when ordering grocery delivery through a 
+                    popular midwest grocer.
+                </p>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <div class="context-grid">
+                <div class="context-item">
+                    <h4>Role</h4>
+                    <p>Lead UX Designer</p>
+                </div>
+                <div class="context-item">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li>Miro</li>
+                        <li>Figma</li>
+                        <li>Google Productivity Suite</li>
+                    </ul>
+                </div>
+                <div class="context-item">
+                    <h4>Team</h4>
+                    <ul>
+                        <li>Phoenix Lowe – UX Designer</li>
+                        <li>Jacob Mortensen – Retail Designer</li>
+                        <li>Jayla Carson – Retail Designer</li>
+                    </ul>
+                </div>
+                <div class="context-item">
+                    <h4>Timeline</h4>
+                    <p>4 months</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="standard-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">The Problem</div>
+                <h2 class="section-title">Users Were Losing Trust in the Service</h2>
+                <p class="section-description">
+                    Users encountered frustrating navigation, inconsistent product categorization, and unclear 
+                    substitution processes, resulting in abandoned carts and low satisfaction pre- and post-delivery.
+                </p>
+            </div>
+
+            <div class="content-grid">
+                <div class="content-block">
+                    <h3>What We Observed</h3>
+                    <p>
+                        Through user interviews and journey mapping, we discovered that the core issue wasn't just 
+                        about interface design—it was about <strong>trust and transparency</strong>. Users felt out 
+                        of control when their items were substituted without clear communication or quality guarantees.
+                    </p>
+                </div>
+                <div class="content-block">
+                    <h3>Why It Mattered</h3>
+                    <p>
+                        For grocery delivery services, trust is everything. When users can't rely on getting what 
+                        they ordered (or understanding why substitutions happen), they stop using the service. This 
+                        wasn't just a UX problem—it was a <strong>service delivery problem</strong> that required 
+                        systems-level thinking.
+                    </p>
+                </div>
+            </div>
+
+            <div class="image-container">
+                <div class="image-wrapper" style="height: 400px;">
+                    <div class="image-placeholder">
+                        📱 Original Screen Flow with Pain Points Annotated
+                        <span class="image-dimensions">Recommended: 1200px × 400px</span>
+                    </div>
+                </div>
+                <p class="image-caption">Original user flow highlighting key frustration points in the substitution process</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Discovery Section -->
+    <section class="standard-section alt">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Discovery</div>
+                <h2 class="section-title">Understanding the User Experience</h2>
+                <p class="section-description">
+                    We conducted interviews with 6 users, focusing on their experiences with the full mobile grocery 
+                    shopping experience, from item selection to substitution selections and final grocery delivery. 
+                    Participants represented a broad demographic, and the goal was to uncover underlying pain points 
+                    and preferences regarding the service.
+                </p>
+            </div>
+
+            <div class="findings-grid">
+                <div class="finding-card">
+                    <span class="finding-number">Finding 1</span>
+                    <h3>Product categorization was confusing and inconsistent</h3>
+                    <p>
+                        Users couldn't find items where they expected them to be, leading to frustration and abandoned 
+                        searches. The taxonomy didn't match mental models formed by in-store shopping experiences.
+                    </p>
+                </div>
+                <div class="finding-card">
+                    <span class="finding-number">Finding 2</span>
+                    <h3>Many users reported issues with item quality after delivery and final payment</h3>
+                    <p>
+                        Substituted items were often lower quality than the original selection, but users had no way 
+                        to communicate preferences or reject poor substitutions before delivery.
+                    </p>
+                </div>
+                <div class="finding-card">
+                    <span class="finding-number">Finding 3</span>
+                    <h3>Users expressed a desire for substitution recommendations based on the original chosen item</h3>
+                    <p>
+                        Rather than random or default substitutions, users wanted intelligent suggestions that matched 
+                        the price point, brand preference, or dietary needs of their original selection.
+                    </p>
+                </div>
+            </div>
+
+            <div class="two-column" style="margin-top: 4rem;">
+                <div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Competitive Analysis</h3>
+                    <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary);">
+                        To better understand the broader grocery delivery landscape, a competitive analysis was conducted 
+                        comparing our client's service with those of the two next most popular in the local area. This 
+                        comparison highlighted key differences in features, such as substitution handling, shopper 
+                        communication, and delivery tracking. These insights provided valuable context for identifying 
+                        areas where the client's experience could be improved to better align with user expectations.
+                    </p>
+                </div>
+                <div class="image-wrapper" style="height: 400px;">
+                    <div class="image-placeholder">
+                        📊 Competitive Analysis Chart
+                        <span class="image-dimensions">Recommended: 600px × 400px</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="two-column reverse" style="margin-top: 4rem;">
+                <div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Customer Persona: Jasmine</h3>
+                    <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary);">
+                        Based on the interviews, a user persona was developed representing the client's target users. 
+                        The persona encapsulated common characteristics, motivations, and challenges real users face 
+                        while using the grocery delivery service. This helped us keep the user perspective at the 
+                        forefront during the design process.
+                    </p>
+                </div>
+                <div class="image-wrapper" style="height: 400px;">
+                    <div class="image-placeholder">
+                        👤 User Persona Card
+                        <span class="image-dimensions">Recommended: 600px × 400px</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Thinking Section -->
+    <section class="standard-section dark">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Service Design Thinking</div>
+                <h2 class="section-title">Mapping the Entire Service Ecosystem</h2>
+                <p class="section-description">
+                    This wasn't just about redesigning screens—it was about understanding the entire service delivery 
+                    system. We created a service blueprint to visualize customer actions alongside frontstage, backstage, 
+                    and support processes, uncovering key service gaps and opportunities for improvement.
+                </p>
+            </div>
+
+            <div class="blueprint-callout">
+                <h3>Why Service Blueprinting Mattered</h3>
+                <p>
+                    The service blueprint revealed that substitution problems weren't just a UI issue—they were rooted 
+                    in backend tagging and categorization processes. By mapping the invisible infrastructure, we could 
+                    design solutions that addressed the root cause, not just the symptoms.
+                </p>
+            </div>
+
+            <div class="image-container">
+                <div class="image-wrapper" style="height: 600px;">
+                    <div class="image-placeholder">
+                        🗺️ Service Blueprint
+                        <span class="image-dimensions">Recommended: 1400px × 600px</span>
+                    </div>
+                </div>
+                <p class="image-caption" style="color: var(--soft-gray);">
+                    Service blueprint mapping the end-to-end grocery delivery experience, with focus on the substitution 
+                    process and backend support systems
+                </p>
+            </div>
+
+            <div class="content-grid" style="margin-top: 3rem;">
+                <div class="content-block">
+                    <h3>What the Blueprint Revealed</h3>
+                    <p>
+                        The backend product tagging system was inconsistent, making it difficult for shoppers to find 
+                        appropriate substitutions. This meant users received poor replacements not because shoppers 
+                        didn't care, but because <strong>the system didn't give them good options</strong>.
+                    </p>
+                </div>
+                <div class="content-block">
+                    <h3>The Service Design Opportunity</h3>
+                    <p>
+                        By improving the backend tagging and categorization system, we could enable better substitution 
+                        suggestions for shoppers AND give users more control over the process—addressing trust at the 
+                        systems level.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="standard-section">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">The Solution</div>
+                <h2 class="section-title">Redesigning for Trust, Transparency, and Control</h2>
+                <p class="section-description">
+                    We implemented a seamless service redesign that improves user flow through enhanced product tagging 
+                    systems, clearer substitution communication, and improved UX writing—simplifying the entire shopping 
+                    experience while respecting user agency.
+                </p>
+            </div>
+
+            <div class="image-container">
+                <div class="image-wrapper" style="height: 500px;">
+                    <div class="image-placeholder">
+                        📱 Updated Screen Flow
+                        <span class="image-dimensions">Recommended: 1400px × 500px</span>
+                    </div>
+                </div>
+                <p class="image-caption">Redesigned user flow showing improvements to substitution selection and transparency</p>
+            </div>
+
+            <div class="two-column" style="margin-top: 4rem;">
+                <div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--terracotta);">
+                        Improved Substitution Flow
+                    </h3>
+                    <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Users can now see intelligent substitution suggestions based on the original item's category, 
+                        price point, and dietary attributes. They can accept, modify, or reject suggestions before 
+                        the shopper begins.
+                    </p>
+                    <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary);">
+                        This gives users <strong>control and transparency</strong>—two key factors in building trust 
+                        with the service.
+                    </p>
+                </div>
+                <div class="image-wrapper" style="height: 400px;">
+                    <div class="image-placeholder">
+                        📱 Substitution Screen Detail
+                        <span class="image-dimensions">Recommended: 600px × 400px</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="two-column reverse" style="margin-top: 4rem;">
+                <div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--terracotta);">
+                        Enhanced Backend Tagging
+                    </h3>
+                    <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 1rem;">
+                        We proposed improvements to the backend product tagging and categorization system to enable 
+                        better substitution matching. This included collaborating with Information Architects to 
+                        redesign the taxonomy.
+                    </p>
+                    <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-secondary);">
+                        This systems-level change would improve the entire service—not just for users, but for 
+                        shoppers trying to do their jobs well.
+                    </p>
+                </div>
+                <div class="image-wrapper" style="height: 400px;">
+                    <div class="image-placeholder">
+                        🏷️ Tagging System Diagram
+                        <span class="image-dimensions">Recommended: 600px × 400px</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <div class="section-header" style="text-align: center; margin-top: 4rem;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem;">Design Principle</h3>
+                <p style="font-size: 1.2rem; color: var(--text-secondary); font-style: italic; max-width: 800px; margin: 0 auto;">
+                    "Solutions that fit seamlessly into the existing design system are easiest for current users to adopt."
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reflection Section -->
+    <section class="standard-section alt">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Impact & Reflection</div>
+                <h2 class="section-title">What I Learned About Service Design</h2>
+            </div>
+
+            <div class="reflection-grid">
+                <div class="reflection-box">
+                    <h3>Key Learnings</h3>
+                    <ul>
+                        <li>Understanding user pain points is crucial for effective design solutions</li>
+                        <li>Collaboration in ideation workshops fosters creativity and innovation</li>
+                        <li>Iterative design testing leads to more user-centered outcomes</li>
+                        <li>Solutions that fit seamlessly in the existing design system are easiest for current users to adopt</li>
+                        <li><strong>Backend systems design directly impacts frontend user experience</strong></li>
+                    </ul>
+                </div>
+                <div class="reflection-box">
+                    <h3>Next Steps</h3>
+                    <ul>
+                        <li>Conduct usability testing on the low-fidelity prototypes</li>
+                        <li>Gather feedback from stakeholders for further refinements</li>
+                        <li>Collaborate with Information Architects to redesign the tagging and categorization process in the backend to improve the substitution experience</li>
+                        <li>Plan for the implementation of the backend redesign for IT handoff</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <div style="max-width: 900px; margin: 4rem auto 0; text-align: center;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--terracotta);">
+                    What This Project Taught Me
+                </h3>
+                <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">
+                    This project reinforced that <strong>good service design requires looking beyond the interface</strong>. 
+                    The substitution problem wasn't just about better UI—it was about backend infrastructure, shopper 
+                    workflows, and communication systems. As someone coming from social work, this felt familiar: 
+                    you can't fix individual problems without addressing the systems that create them. That's what 
+                    service design is really about.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2>Want to See More of My Work?</h2>
+            <p>Explore other projects or get in touch to discuss how I can help with your next service design challenge.</p>
+            <div class="cta-buttons">
+                <a href="index.html" class="btn-primary">View All Projects</a>
+                <a href="mailto:niklowe20@gmail.com" class="btn-secondary">Get in Touch</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p style="opacity: 0.7; font-size: 0.9rem;">© 2025 Phoenix Lowe. Designed with intention.</p>
+    </footer>
+</body>
+</html>
