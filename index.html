@@ -346,10 +346,23 @@
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
         }
 
-        .work-image {
+        .grocery-thumb {
             width: 100%;
             height: 250px;
             background-image: url("/images/home/grab-unsplash.jpg");
+            background-color: #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fire-thumb {
+            width: 100%;
+            height: 250px;
+            background-image: url("/images/home/fire-unsplash.jpg");
             background-color: #ccc;
             display: flex;
             align-items: center;
@@ -713,7 +726,7 @@
             <div class="work-grid">
                 <!-- F.I.R.E. Framework -->
                 <a href="fire-framework.html" class="work-card">
-                    <div class="work-image" style="background: linear-gradient(135deg, #d47366, #b8967d);">
+                    <div class="fire-thumb" style="background: linear-gradient(135deg, #d47366, #b8967d);">
                         <span style="color: white;">🔥</span>
                         <span class="work-tag" style="color: #d47366;">Anti-Burnout Service Framework</span>
                     </div>
@@ -733,7 +746,7 @@
 
                 <!-- Grocery Delivery Service -->
                 <a href="grocery-delivery-case-study.html" class="work-card">
-                    <div class="work-image">
+                    <div class="grocery-thumb">
                         <!-- <span style="color: white;">🛒</span> -->
                         <span class="work-tag" style="color: #8b9d83;">In-App Grocery Delivery Flow</span>
                     </div>
